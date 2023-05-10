@@ -1,31 +1,24 @@
-describe("TestingSorting", () => {
-  beforeEach(() => {
-    cy.visit("/index.html");
-    cy.get("#bands")
-      .then($ul => {
-        // create a div element and set its id attribute to 'fixture'
-        const div = document.createElement("div");
-        div.setAttribute("id", "fixture");
-        // append the div element to the body element
-        document.body.appendChild(div);
-        // append the ul element to the div element
-        div.appendChild($ul[0]);
-      })
-      .as("ul");
-  });
+let arr = ['Tajmahal', 'Victoria Memorial', 'The Virupaksha Temple'];
+let updatedList = arr.map((element) => {
+	// ["a", "some", "one"]
+	let words = element.split(" ") ;
+	let updatedString = words.reduce((prev, current, index) => {
+		if(current != "The" && current != "an" && current != "a"){
+			return prev + " " + current ;
+		}
+		return prev ;
+	}, "")
 
-  it("TestingSorting - Sorted bands are displayed correctly", () => {
-    cy.get("@ul").within(() => {
-      const bandList = Cypress.$("li").toArray();
-      const bandNames = bandList.map(band => band.textContent);
-      const sortedBandNames = bandNames.sort(function(a, b) {
-        return strip(a) > strip(b) ? 1 : -1;
-      });
-      expect(bandNames).to.deep.equal(sortedBandNames);
-    });
-  });
+	return updatedString ;
+}) ;
+let mp = {} ; // {"some one" : "a some one"}
+updatedList.forEach( (element, index) => {
+	mp[element] = arr[index] ;
 });
+updatedList.sort(); 
 
-function strip(bandName) {
-  return bandName.replace(/^(a|the|an) /i, "").trim();
-}
+let finalAns = updatedList.map((element) => {
+    return mp[element] ;
+})
+
+console.log(finalAns); 
