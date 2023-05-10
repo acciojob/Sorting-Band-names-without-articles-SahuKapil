@@ -1,17 +1,31 @@
-//your code here
+describe("TestingSorting", () => {
+  beforeEach(() => {
+    cy.visit("/index.html");
+    cy.get("#bands")
+      .then($ul => {
+        // create a div element and set its id attribute to 'fixture'
+        const div = document.createElement("div");
+        div.setAttribute("id", "fixture");
+        // append the div element to the body element
+        document.body.appendChild(div);
+        // append the ul element to the div element
+        div.appendChild($ul[0]);
+      })
+      .as("ul");
+  });
 
-// script.js
-let bandNames = ['The Rolling Stones', 'Led Zeppelin', 'Pink Floyd', 'The Beatles', 'Aerosmith', 'The Who'];
+  it("TestingSorting - Sorted bands are displayed correctly", () => {
+    cy.get("@ul").within(() => {
+      const bandList = Cypress.$("li").toArray();
+      const bandNames = bandList.map(band => band.textContent);
+      const sortedBandNames = bandNames.sort(function(a, b) {
+        return strip(a) > strip(b) ? 1 : -1;
+      });
+      expect(bandNames).to.deep.equal(sortedBandNames);
+    });
+  });
+});
 
-function stripArticles(name) {
-  return name.replace(/^(a |an |the )/i, '').trim();
-}
-
-bandNames.sort((a, b) => stripArticles(a) > stripArticles(b) ? 1 : -1);
-
-const bandList = document.getElementById('band');
-for (let i = 0; i < bandNames.length; i++) {
-  const li = document.createElement('li');
-  li.textContent = bandNames[i];
-  bandList.appendChild(li);
+function strip(bandName) {
+  return bandName.replace(/^(a|the|an) /i, "").trim();
 }
