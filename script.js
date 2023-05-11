@@ -1,22 +1,20 @@
-() => {
-  cy.visit('https://example.com');
-  
-  // Wait for the li elements to appear
-  cy.get('li', { timeout: 10000 }).should('have.length.at.least', 1);
+// Given array of band names
+let bandNames = ["The Beatles", "Anathema", "Aerosmith", "The Who", "Pink Floyd"];
 
-  let tags_content = [];
-  const li_tags_count = document.getElementsByTagName('li').length;
+// Remove articles from band names
+let updatedBandNames = bandNames.map((name) => {
+  return name.replace(/^(a |an |the )/i, "").trim();
+});
 
-  // Getting li tags content and checking if they are without any articles and in sorted order
-  for (let index = 0; index < li_tags_count; index++) {
-    cy.get('li').eq(index).then($el => {
-      tags_content.push($el.text());
-    });
-  }
+// Sort band names in lexicographic order
+updatedBandNames.sort();
 
-  tags_content.forEach(tag_content => {
-    const first_word = tag_content.split(' ')[0];
-    let not_article = first_word != 'A' && first_word != 'An' && first_word != 'The';
-    expect(not_article).to.be.equal(true);
-  });
-}
+// Get the ul tag with id 'band'
+let bandList = document.querySelector("#band");
+
+// Append li tags for each band name
+updatedBandNames.forEach((name) => {
+  let li = document.createElement("li");
+  li.innerText = name;
+  bandList.appendChild(li);
+});
