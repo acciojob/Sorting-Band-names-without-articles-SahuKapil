@@ -1,38 +1,20 @@
-// The initial array with place names
-let arr = ['Tajmahal', 'Victoria Memorial', 'The Virupaksha Temple'];
+const bands = ["The Plot in You", "The Devil Wears Prada", "Pierce the Veil", "Norma Jean", "The Bled", "Say Anything", "The Midway State", "We Came as Romans", "Counterparts", "Oh, Sleeper", "A Skylit Drive", "Anywhere But Here", "An Old Dog"];
 
-// The map function is used to create a new array of place names after filtering out the articles "a", "an" and "the"
-let updatedList = arr.map((element) => {
-	// Split the place name into words
-	let words = element.split(" ") ;
+// Create a function to strip articles from a band name
+function stripArticles(bandName) {
+  const regex = new RegExp(/^(a |the |an )/i);
+  return bandName.replace(regex, "").trim();
+}
 
-	// Use the reduce function to iterate through each word of the place name and filter out articles
-	let updatedString = words.reduce((prev, current, index) => {
-		if(current != "The" && current != "an" && current != "a"){
-			// If the word is not an article, add it to the updated string
-			return prev + " " + current ;
-		}
-		// Otherwise, return the previous string
-		return prev ;
-	}, "")
+// Sort the band names without articles
+const sortedBands = bands.map(stripArticles).sort();
 
-	// Return the updated string for this place name
-	return updatedString ;
-}) ;
+// Create an `ul` tag with the id `band`
+const bandList = document.getElementById("band");
 
-// Create a new object that maps each updated place name to its original place name
-let mp = {} ;
-updatedList.forEach( (element, index) => {
-	mp[element] = arr[index] ;
+// Add the sorted band names to the `ul` tag
+sortedBands.forEach((bandName) => {
+  const li = document.createElement("li");
+  li.textContent = bandName;
+  bandList.appendChild(li);
 });
-
-// Sort the updated place names alphabetically
-updatedList.sort(); 
-
-// Create a final array of place names by looking up the original place names using the mapping object
-let finalAns = updatedList.map((element) => {
-    return mp[element] ;
-})
-
-// Output the final array of place names
-console.log(finalAns); 
