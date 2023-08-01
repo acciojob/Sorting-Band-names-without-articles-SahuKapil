@@ -6,8 +6,8 @@ function stripArticles(bandName) {
   return bandName.replace(regex, "").trim();
 }
 
-// Sort the band names without articles
-const sortedBandNames = bandNames.map(stripArticles).sort();
+// Sort the band names without articles (case-insensitively)
+const sortedBandNames = bandNames.map(stripArticles).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
 
 // Create an `ul` element with the id `band`
 const bandList = document.createElement("ul");
