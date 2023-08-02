@@ -1,24 +1,38 @@
-const bandNames = ["The Virupaksha Temple", "Victoria Memorial", "Taj Mahal"];
+// The initial array with place names
+let arr = ['Tajmahal', 'Victoria Memorial', 'The Virupaksha Temple'];
 
-// Create a function to strip articles from band names
-function stripArticles(bandName) {
-  const regex = new RegExp("^(a|an|the)", "i");
-  return bandName.replace(regex, "").trim();
-}
+// The map function is used to create a new array of place names after filtering out the articles "a", "an" and "the"
+let updatedList = arr.map((element) => {
+	// Split the place name into words
+	let words = element.split(" ") ;
 
-// Sort the band names without articles (case-insensitively)
-const sortedBandNames = bandNames.map(stripArticles).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+	// Use the reduce function to iterate through each word of the place name and filter out articles
+	let updatedString = words.reduce((prev, current, index) => {
+		if(current != "The" && current != "an" && current != "a"){
+			// If the word is not an article, add it to the updated string
+			return prev + " " + current ;
+		}
+		// Otherwise, return the previous string
+		return prev ;
+	}, "")
 
-// Create an `ul` element with the id `band`
-const bandList = document.createElement("ul");
-bandList.setAttribute("id", "band");
+	// Return the updated string for this place name
+	return updatedString ;
+}) ;
 
-// Add `li` elements to the `ul` element for each band name
-sortedBandNames.forEach((bandName) => {
-  const liElement = document.createElement("li");
-  liElement.textContent = bandName;
-  bandList.appendChild(liElement);
+// Create a new object that maps each updated place name to its original place name
+let mp = {} ;
+updatedList.forEach( (element, index) => {
+	mp[element] = arr[index] ;
 });
 
-// Append the `ul` element to the DOM
-document.body.appendChild(bandList);
+// Sort the updated place names alphabetically
+updatedList.sort(); 
+
+// Create a final array of place names by looking up the original place names using the mapping object
+let finalAns = updatedList.map((element) => {
+    return mp[element] ;
+})
+
+// Output the final array of place names
+console.log(finalAns); 
